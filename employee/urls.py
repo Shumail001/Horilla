@@ -80,6 +80,8 @@ urlpatterns = [
         views.employee_update_bank_details,
         name="employee-create-bank-details",
     ),
+    path('user-info/', views.user_info, name='user_info'),
+
     path(
         "employee-update-bank-details/<int:obj_id>/",
         views.employee_update_bank_details,

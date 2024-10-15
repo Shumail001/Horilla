@@ -82,6 +82,7 @@
               <ion-icon class="me-2" name="lock-closed-outline"></ion-icon>
               {% trans "Secure Sign-in" %}
             </button>
+           
             <small class="text-center"
               ><a
                 href="{% url 'forgot-password' %}"
@@ -91,6 +92,20 @@
             >
           </form>
         </div>
+        
+
+        <small class="text-center">
+          <a href="/saml2/login/" style="color: black; border: 1px solid black; padding-left: 130px; padding-right: 130px; padding-top: 10px; padding-bottom: 10px; text-decoration: none;font-weight: bold; display: inline-block;">
+            Continue With SAML
+          </a>
+        </small>
+        <style>
+          a:hover {
+            background-color: lightgray;
+          }
+        </style>
+        
+        
         <div>
           <img
             src={% if white_label_company.icon %}"{{white_label_company.icon.url}}" {% else %} "{% static 'images/ui/auth-logo.png' %}" {% endif %}

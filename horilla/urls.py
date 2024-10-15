@@ -21,12 +21,15 @@ from django.urls import include, path, re_path
 import notifications.urls
 from base.views import home, login_user, logout_user
 
+
+
 from . import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+
     path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path('saml2/', include('djangosaml2.urls')),
     path("", include("base.urls")),
     path("", include("horilla_automations.urls")),
     path("", include("horilla_views.urls")),

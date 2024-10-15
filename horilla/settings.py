@@ -1,3 +1,4 @@
+
 """
 Django settings for horilla project.
 
@@ -15,6 +16,11 @@ from os.path import join
 from pathlib import Path
 
 import environ
+import ldap3
+import saml2
+import saml2.xmldsig
+import saml2.saml
+
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -52,14 +58,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "django.contrib.sites",
     "notifications",
     "mathfilters",
     "corsheaders",
     "simple_history",
     "django_filters",
     "base",
-    "recruitment",
     "employee",
+    "recruitment",
     "leave",
     "pms",
     "onboarding",
@@ -68,6 +75,8 @@ INSTALLED_APPS = [
     "payroll",
     "widget_tweaks",
     "django_apscheduler",
+    "djangosaml2",
+    "django_crontab",
 ]
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 
@@ -86,6 +95,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "djangosaml2.middleware.SamlSessionMiddleware",
 ]
 
 ROOT_URLCONF = "horilla.urls"
@@ -109,6 +119,44 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "horilla.wsgi.application"
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'djangosaml2.backends.Saml2Backend',
+    'horilla.ldap_backend.LDAPBackend'
+    # 'django_auth_ldap.backend.LDAPBackend'
+    # 'employee.saml_backend.CustomSAMLBackend',
+]
+
+SAML_ALLOWED_HOSTS = ['http://127.0.0.1:9000','http://127.0.0.1:8000']
+
+# Preferred SSO and Logout bindings
+
+SAML_DEFAULT_BINDING = saml2.BINDING_HTTP_REDIRECT
+SAML_LOGOUT_REQUEST_PREFERRED_BINDING = saml2.BINDING_HTTP_REDIRECT
+SAML_IGNORE_LOGOUT_ERRORS = True
+SAML_CSP_HANDLER = ''
+
+SAML_ATTRIBUTE_MAPPING = {
+    'Email': ('email', ),
+    'DisplayName': ('first_name', ),
+    'Name': ('username', ),
+}
+
+
+
+SAML_CREATE_UNKNOWN_USER = True
+
+SAML_USE_NAME_ID_AS_USERNAME = True
+
+# SAML_DJANGO_USER_MAIN_ATTRIBUTE = 'email'
+
+LOGIN_URL = '/saml2/login/'
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/login'
 
 
 # Database
@@ -153,18 +201,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "Asia/Kolkata"
-
-USE_I18N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -214,8 +250,6 @@ DJANGO_NOTIFICATIONS_CONFIG = {
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-LANGUAGE_CODE = "en-us"
-
 LANGUAGES = (
     ("en", "English (US)"),
     ("de", "Deutsche"),
@@ -227,6 +261,12 @@ LANGUAGES = (
 LOCALE_PATHS = [
     join(BASE_DIR, "horilla", "locale"),
 ]
+
+
+# Internationalization
+# https://docs.djangoproject.com/en/4.1/topics/i18n/
+
+LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Asia/Kolkata"
 
@@ -247,3 +287,48 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+SAML_CONFIG = {
+    'xmlsec_binary': '/usr/bin/xmlsec1',
+    'entityid': 'http://localhost:9000/saml2/metadata/',
+    'service': {
+        'sp': {
+            'name': 'Horilla App',
+            'endpoints': {
+                'assertion_consumer_service': [
+                    ('http://localhost:9000/saml2/acs/', saml2.BINDING_HTTP_POST),
+                    # ('https://s-django.intra.ocyber.work/saml2/acs/', saml2.BINDING_HTTP_REDIRECT),
+                ],
+                'single_logout_service': [
+                    ('http://localhost:9000/saml2/ls/', saml2.BINDING_HTTP_REDIRECT),
+                    ('http://localhost:9000/saml2/ls/post', saml2.BINDING_HTTP_POST),
+                ],
+            },
+
+            'signing_algorithm': saml2.xmldsig.SIG_RSA_SHA256,
+            'digest_algorithm': saml2.xmldsig.DIGEST_SHA256,
+            'allow_unsolicited': True,
+            'want_response_signed': True,
+        },
+    },
+    'metadata': {
+        'local': [os.path.join(BASE_DIR, 'horilla', 'metadata.xml')],
+    },
+    'debug': True,
+    # Signing
+    'key_file': os.path.join(BASE_DIR, 'horilla', 'private.key'),  # private part
+    'cert_file': os.path.join(BASE_DIR, 'horilla', 'public.pem'),  # public part
+
+}
+
+
+CRONJOBS = [
+    ('*/1 * * * *', 'horilla.ldap_backend.sync_ldap_users'),
+]
+
+# LDAP configuration
+# LDAP_SERVER = 'localhost'
+# LDAP_PORT = 389
+# BASE_DN = 'ou=horilla-application,dc=example,'
+# ADMIN_USER = 'cn=admin,dc=example,dc=com'
+# ADMIN_PASSWORD = '123'

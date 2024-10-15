@@ -1,0 +1,18 @@
+<EntityDescriptor xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="http://localhost:8000">
+<IDPSSODescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+<KeyDescriptor use="signing">
+<KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+<X509Data xmlns="http://www.w3.org/2000/09/xmldsig#">
+<X509Certificate xmlns="http://www.w3.org/2000/09/xmldsig#">MIIE2TCCAsGgAwIBAgIDAeJAMA0GCSqGSIb3DQEBCwUAMCYxDjAMBgNVBAoTBWFkbWluMRQwEgYDVQQDDAtjZXJ0X2VpamFnbTAeFw0yNDA4MTMxNDUzNDdaFw00NDA4MTMxNDUzNDdaMCYxDjAMBgNVBAoTBWFkbWluMRQwEgYDVQQDDAtjZXJ0X2VpamFnbTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAK2cs+hcpmnmZgVr7b3UNMx3C1cw2udcuoEALtFHCsOM6Pny/XVRG41iW51bMZKt8HwFtMrK/aQubyXJkBCxLsVSfBYfYF800R3UgYI2vkZBZvadkctZonjrsT2azp4sk1QNMdoR045nQxlxz5c/JjB/cA1q04j707qcRtzugDvtWEAkOPziqbZtXNZl0bgIYy6JSMwhXsT75oLXKMvmsN0CSi7q/aLbKkGeSNkHKL57vJoTw/a0pbimFnTdFBAWgBMGs2fUG2wimzESgJhzyftwjyC1wVmNtnyLjGUIcdZbsC7GgHk/gQt2ITTI3XH5zpbXpNNlnHRncDGS823Wn73lQQRfi3GRKvWXz8ukobapT/jYWzI9Ly9oay82z/OKZezVY7I2vvtjg/jr7NHRBTGlnSrMnPGC/FEOqhqDCEa8a80frZYJuworgptaTW8ZjSWzlJ09EfvIrBZ0TWcAHt3GQctoXjKjhpWb5KdRTzkaG5196GwkQZ/VQ5RjNNrmbXU8Qgn7+guWLzCHJbDl380pVdZ6coMMEUWo0/M70ryMJUGQcb1ycahscMu+W9E5n0nC6fEapN5vE5H3IiL9I5uH+gOYZvr8Ru7kQ8jNIr4suvXqvzM8FnnkVBbUd/Qm6inshS39cHkZPC0ivNwIhkQwRNfwqEwQy0UAWSbXuWfxAgMBAAGjEDAOMAwGA1UdEwEB/wQCMAAwDQYJKoZIhvcNAQELBQADggIBABH+M8IFQ35VXmszEDKvZhbUSBk/gwi2pGQnU7gGyxdIE3PQTJOnZZ+yqDZP093fIdncf91T0CnIQ9g8P7zndSRdotfp6GIBuFFglRvrLo3+JZkS2nWnrH0bYx5krKTihxHnC12MhBn1H9aq5zy77s30ADPW5UPy1XTRFsa+grGeb85MgWViIETdR8XqKFW17xUQ8+CZR73+y0H1W2pJNM7PbIDZhMnz7emjRMWLJRD30LcYoLFptq6PS/uURd5Zgl5hQ7kBLEGiKEatwA7QYw4C3WJW1Ck7fpvGP07MhmXiyeRByeoMSpElAumwUOfwkVc/yS1JHkS3lvS47UV4LrptTjpq2tyAWGulrm8HfrUg9R2kDEAU9gmMQeyL1HPs6Okan5bHkpLu8CA+KxOIYwy1CLqi1NhutipTaY7NqG8PDMYkMk/u4UgYMf3v/cprrXaY3W1iNO3zY4HEB4tXGOLbl6wfpKdVG0quUwmL98I0zvbRe2ehq1tb4bFRAHGWhv1GaqcAux/9lLz8w+l35Vckg5yINQuLuemIBjZIJKELnCuSnr2WV4ZUdwdaYy0WvwyAfjvqgww1vjKuliT0o/YWNWTDNqQKDHdh1f+0yjYkXcE6VOEq3cTOt+E7ojTNURKJKV1cYgiMBoTv9g2SgYib9/SGZrPYLtwI9IIihWYo</X509Certificate>
+</X509Data>
+</KeyInfo>
+</KeyDescriptor>
+<NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+<NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="http://localhost:8000/login/saml/authorize/admin/horilla-application"/>
+<Attribute xmlns="urn:oasis:names:tc:SAML:2.0:assertion" Name="Email" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" FriendlyName="E-Mail"/>
+<Attribute xmlns="urn:oasis:names:tc:SAML:2.0:assertion" Name="DisplayName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" FriendlyName="displayName"/>
+<Attribute xmlns="urn:oasis:names:tc:SAML:2.0:assertion" Name="Name" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" FriendlyName="Name"/>
+</IDPSSODescriptor>
+</EntityDescriptor>

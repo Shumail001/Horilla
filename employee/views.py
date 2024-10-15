@@ -116,6 +116,14 @@ from payroll.models.models import (
 from pms.models import Feedback
 from recruitment.models import Candidate, InterviewSchedule, Recruitment, Stage
 
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+# @login_required
+def user_info(request):
+    return JsonResponse({'username': request.user.username, 'email': request.user.email})
+
+
 operator_mapping = {
     "equal": operator.eq,
     "notequal": operator.ne,

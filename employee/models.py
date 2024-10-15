@@ -104,6 +104,8 @@ class Employee(models.Model):
     objects = HorillaCompanyManager(
         related_company_field="employee_work_info__company_id"
     )
+    # In your Employee model
+  
 
     def get_image(self):
         """
@@ -363,6 +365,10 @@ class Employee(models.Model):
             setattr(request, "working_employees", working_employees)
         working_employees = request.working_employees
         return self.pk in working_employees
+    
+
+
+
 
     class Meta:
         """
@@ -442,6 +448,8 @@ class Employee(models.Model):
             return self.save()
 
         return self
+
+
 
 
 class EmployeeTag(HorillaModel):
